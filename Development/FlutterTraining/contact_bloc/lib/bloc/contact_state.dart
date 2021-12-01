@@ -13,6 +13,12 @@ class ContactFetchedState extends ContactState {
   ContactFetchedState({required this.listContacts});
 }
 
+class TabChangedState extends ContactState {
+  List<Contacts> listContacts;
+  String? sortingType;
+  TabChangedState({required this.listContacts, this.sortingType});
+}
+
 class ContactsErrorState extends ContactState {
   String message;
   ContactsErrorState({required this.message});

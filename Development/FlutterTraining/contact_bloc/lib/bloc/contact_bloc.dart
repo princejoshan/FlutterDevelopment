@@ -19,6 +19,11 @@ class ContactListBloc extends Bloc<ContactEvent, ContactState> {
           emit(ContactsErrorState(message: e.toString()));
         }
       }
+      if (event is FetchListToTab) {
+        emit(TabChangedState(
+            listContacts: event.contactList
+                .sublist(event.index * 20, (event.index + 1) * 20)));
+      }
     });
   }
 }

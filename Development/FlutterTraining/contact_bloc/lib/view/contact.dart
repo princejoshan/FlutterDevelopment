@@ -6,6 +6,10 @@ import 'package:contact_bloc/bloc/contact_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:contact_bloc/helper/constants.dart';
 import 'package:contact_bloc/model/contact_model.dart';
+import 'package:contact_bloc/view/theme.dart';
+import 'dart:async';
+
+StreamController<bool> isLightTheme = StreamController();
 
 class ContactsScreen extends StatefulWidget {
   const ContactsScreen({Key? key}) : super(key: key);
@@ -17,6 +21,7 @@ class ContactsScreen extends StatefulWidget {
 class _ContactsHomeState extends State<ContactsScreen> {
   late ContactListBloc contactListBloc;
   late List<Contacts> mainListContacts;
+
   // String selectedTheme = SharedPrefrences().getTheme ?? '';
 
   Map<int, String> sortingTypeAppliedAtTabIndex = {};
@@ -42,48 +47,64 @@ class _ContactsHomeState extends State<ContactsScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(AppConstants.contactTitle),
+          // ignore: prefer_const_literals_to_create_immutables
+          actions: [
+            IconButton(
+                onPressed: () {
+                  const ThemeClass(Brightness.dark);
+                },
+                icon: const Icon(Icons.dark_mode)),
+            IconButton(onPressed: () {}, icon: const Icon(Icons.light_mode)),
+          ],
           bottom: TabBar(
             onTap: (index) {
               userCurrentTab = index;
               contactListBloc.add(
-                  FetchContacts(index: index, contactList: mainListContacts));
+                  FetchListToTab(index: index, contactList: mainListContacts));
             },
             tabs: AppConstants.contactTabs,
             isScrollable: true,
           ),
         ),
-        body: TabBarView(
-          children: [
-            BlocBuilder<ContactListBloc, ContactState>(
-              builder: (context, state) {
-                if (state is ContactFetchedState) {
-                  mainListContacts = state.listContacts;
-                  return TabbarView(
-                    contactList: mainListContacts,
-                  );
-                }
+        // body: TabBarView(
+        //   children: [
+        //     BlocBuilder<ContactListBloc, ContactState>(
+        //       builder: (context, state) {
+        //         if (state is ContactFetchedState) {
+        //           mainListContacts = state.listContacts;
+        //           return TabbarView(
+        //             contactList: mainListContacts,
+        //           );
+        //         }
 
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              },
-            )
-          ],
-        ),
-        // body: BlocBuilder<ContactListBloc, ContactState>(
-        //   builder: (context, state) {
-        //     if (state is ContactFetchedState) {
-        //       mainListContacts = state.listContacts;
-        //       return Tabbar(
-        //         contactList: mainListContacts,
-        //       );
-        //     }
-
-        //     return const Center(
-        //       child: CircularProgressIndicator(),
-        //     );
-        //   },
+        //         return const Center(
+        //           child: CircularProgressIndicator(),
+        //         );
+        //       },
+        //     )
+        //   ],
         // ),
+        body: BlocBuilder<ContactListBloc, ContactState>(
+          builder: (context, state) {
+            if (state is ContactFetchedState) {
+              mainListContacts = state.listContacts;
+              return TabbarView(
+                contactList: mainListContacts.sublist(0, 20),
+              );
+            }
+            if (state is TabChangedState) {
+              mainListContacts.replaceRange(userCurrentTab * 20,
+                  (userCurrentTab + 1) * 20, state.listContacts);
+              return TabbarView(
+                contactList: state.listContacts,
+              );
+            }
+
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          },
+        ),
       ),
     );
   }

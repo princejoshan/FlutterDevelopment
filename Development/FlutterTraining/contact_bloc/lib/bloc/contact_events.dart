@@ -9,3 +9,9 @@ class FetchContacts extends ContactEvent {
   List<Contacts> contactList;
   FetchContacts({required this.index, required this.contactList});
 }
+
+class FetchListToTab extends ContactEvent {
+  int index;
+  List<Contacts> contactList;
+  FetchListToTab({required this.index, required this.contactList});
+}
