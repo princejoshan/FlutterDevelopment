@@ -1,5 +1,7 @@
 import 'package:contact_bloc/bloc/contact_events.dart';
 import 'package:contact_bloc/bloc/contact_state.dart';
+import 'package:contact_bloc/bloc/theme_bloc.dart';
+import 'package:contact_bloc/bloc/theme_events.dart';
 import 'package:contact_bloc/view/tabbarview.dart';
 import 'package:flutter/material.dart';
 import 'package:contact_bloc/bloc/contact_bloc.dart';
@@ -8,8 +10,6 @@ import 'package:contact_bloc/helper/constants.dart';
 import 'package:contact_bloc/model/contact_model.dart';
 import 'package:contact_bloc/view/theme.dart';
 import 'dart:async';
-
-StreamController<bool> isLightTheme = StreamController();
 
 class ContactsScreen extends StatefulWidget {
   const ContactsScreen({Key? key}) : super(key: key);
@@ -51,10 +51,17 @@ class _ContactsHomeState extends State<ContactsScreen> {
           actions: [
             IconButton(
                 onPressed: () {
-                  const ThemeClass(Brightness.dark);
+                  // ThemeBloc().add(ThemeEvent(appTheme: AppConstants.darkTheme));
+                  BlocProvider.of<ThemeBloc>(context)
+                      .add(ThemeEvent(appTheme: AppConstants.darkTheme));
                 },
                 icon: const Icon(Icons.dark_mode)),
-            IconButton(onPressed: () {}, icon: const Icon(Icons.light_mode)),
+            IconButton(
+                onPressed: () {
+                  BlocProvider.of<ThemeBloc>(context)
+                      .add(ThemeEvent(appTheme: AppConstants.lightTheme));
+                },
+                icon: const Icon(Icons.light_mode)),
           ],
           bottom: TabBar(
             onTap: (index) {

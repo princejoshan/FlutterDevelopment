@@ -10,4 +10,7 @@ class AppConstants {
   ];
   // ignore: non_constant_identifier_names
   static String contactTitle = 'Contacts';
+  static const String lightTheme = 'Light';
+  static const String darkTheme = 'Dark';
+  static const String systemTheme = 'System';
 }
