@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names, deprecated_member_use
 
 import 'package:flutter/material.dart';
+import './upload_document.dart';
 
 class UpdateAddress extends StatefulWidget {
   const UpdateAddress({Key? key}) : super(key: key);
@@ -17,7 +18,7 @@ class UpdateState extends State<UpdateAddress> {
     "Four",
     "Five"
   ]; //The list of values we want on the dropdown
-
+  late bool selectionChanged = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +59,7 @@ class UpdateState extends State<UpdateAddress> {
                     style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w400,
-                        color: Colors.grey),
+                        color: Colors.transparent),
                   ),
                 ),
                 const Padding(padding: EdgeInsets.only(top: 16.0)),
@@ -72,21 +73,37 @@ class UpdateState extends State<UpdateAddress> {
                   ),
                   child: DropdownButton<String>(
                     underline: DropdownButtonHideUnderline(child: Container()),
-                    hint: const Text('Select document'),
+                    hint: const Text(
+                      'Select document',
+                      style: TextStyle(fontSize: 18),
+                    ),
                     isExpanded: true,
                     items: _dropdownValues.map((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
-                        child: Text(value),
+                        child: Text(
+                          value,
+                          style: const TextStyle(fontSize: 18),
+                        ),
                       );
                     }).toList(),
                     // ignore: avoid_types_as_parameter_names
                     onChanged: (Dart_CObject) {
+                      selectionChanged = true;
                       setState(() {});
                     },
-                    value: _dropdownValues.first,
+                    style: const TextStyle(
+                      color: Colors.purple,
+                      //backgroundColor: Colors.grey,
+                    ),
+                    // value: _dropdownValues.first,
                   ),
                 ),
+                const Padding(padding: EdgeInsets.only(top: 16.0)),
+                Visibility(
+                    visible: selectionChanged,
+                    child:
+                        FrontAndRearImages(title: 'Upload your Aathar card')),
                 const Spacer(),
                 SizedBox(
                   width: double.infinity,
@@ -99,4 +116,18 @@ class UpdateState extends State<UpdateAddress> {
               ]),
         ));
   }
+
+  void showFrontAndRear(int d) {
+// ignore: unrelated_type_equality_checks
+    if (d == true) {
+      FrontAndRearImages(title: 'Upload your Aathar card');
+    } else {}
+  }
 }
+
+List<Map<String, dynamic>> options = [
+  {'title': 'minLength', 'value': 'minLength', 'icon': 'chat.svg'},
+  {'title': 'maxLength', 'value': 'maxLength', 'icon': 'sbi.png'},
+  {'title': 'regex', 'value': 'regex', 'icon': 'hdfc.png'},
+  {'title': 'required', 'value': 'required', 'icon': 'government.svg'},
+];
