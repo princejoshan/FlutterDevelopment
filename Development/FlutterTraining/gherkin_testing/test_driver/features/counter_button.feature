@@ -6,5 +6,3 @@ Feature: Counter Button
 
     Scenario: User taps on counter button
         Given the user is at the counter dashboard
-        When the user taps on the plus button
-        Then the counter value is at 1
