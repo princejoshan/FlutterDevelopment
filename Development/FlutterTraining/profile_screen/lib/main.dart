@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 //import 'profile.dart';
-import 'update_address.dart';
+import 'update_address_screen.dart';
+import 'upload_document_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -26,7 +27,16 @@ class MyApp extends StatelessWidget {
           // is not restarted.
           //primarySwatch: Colors.grey,
           ),
-      home: const UpdateAddress(),
+      //home: const UpdateAddress(),
+      initialRoute: '/',
+      routes: {
+        // When navigating to the "/" route, build the FirstScreen widget.
+        '/': (context) => const UpdateAddress(),
+        // When navigating to the "/second" route, build the SecondScreen widget.
+        Upload.route: (context) => Upload(),
+
+        // '/second': (context) =>  Upload(Headers()),
+      },
     );
   }
 }
